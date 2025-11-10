@@ -1,0 +1,53 @@
+services:
+  app:
+    build: .
+    image: ghcr.io/arszh/devops-portfolio-app:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=local
+    restart: unless-stopped
+
+  prometheus:
+    build:
+      context: .
+      dockerfile: docker/prometheus/Dockerfile
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:ro"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+    restart: unless-stopped
+
+  node-exporter:
+    profiles: ["linux"]
+    image: prom/node-exporter:latest
+    command: ["--path.rootfs=/host"]
+    volumes:
+      - type: bind
+        source: /
+        target: /host
+        read_only: true
+        bind:
+          propagation: rslave
+    pid: host
+    network_mode: bridge
+    ports:
+      - "9100:9100"
+    restart: unless-stopped

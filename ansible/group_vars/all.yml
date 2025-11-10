@@ -1,0 +1,5 @@
+project_name: devops-portfolio
+image: ghcr.io/arszh/devops-portfolio-app
+image_tag: latest
+app_port: 8000
+http_port: 80

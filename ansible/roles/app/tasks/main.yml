@@ -1,0 +1,38 @@
+---
+- name: Ensure docker is installed
+  become: true
+  apt:
+    name:
+      - docker.io
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+- name: Create project dir
+  become: true
+  file:
+    path: "/opt/{{ project_name }}"
+    state: directory
+    mode: '0755'
+
+- name: Upload prod docker-compose
+  become: true
+  copy:
+    src: docker-compose.prod.yml
+    dest: "/opt/{{ project_name }}/docker-compose.yml"
+    mode: '0644'
+
+- name: Upload prometheus config
+  become: true
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/prometheus.yml"
+    dest: "/opt/{{ project_name }}/prometheus.yml"
+    mode: '0644'
+
+- name: Pull images
+  become: true
+  command: docker compose -f /opt/{{ project_name }}/docker-compose.yml pull
+
+- name: Up services
+  become: true
+  command: docker compose -f /opt/{{ project_name }}/docker-compose.yml up -d
