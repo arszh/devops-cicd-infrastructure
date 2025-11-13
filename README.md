@@ -1,49 +1,54 @@
-# Devops-portfolio — Production-Style DevOps (CI/CD, IaC, Observability)
-[![CI/CD](https://github.com/arszh/devops-portfolio/actions/workflows/cicd.yml/badge.svg)](https://github.com/arszh/devops-portfolio/actions)
+# DevOps-CICD-Infrastructure — Production-Style DevOps (CI/CD, IaC, Observability)
+[![CI/CD](https://github.com/arszh/devops-production-demo/actions/workflows/cicd.yml/badge.svg)](https://github.com/arszh/devops-production-demo/actions)
 
-Демонстрационный, но production‑подобный DevOps проект. Покрывает: Docker, GitHub Actions (CI/CD), Terraform (AWS), Ansible, Prometheus/Grafana, cAdvisor, FastAPI.
+A demonstration but production-like DevOps project. It includes Docker-based services, CI/CD with GitHub Actions, AWS infrastructure provisioning with Terraform, automated deployment via Ansible, and observability with Prometheus/Grafana/cAdvisor. The stack is minimal yet reflects real production workflows.
 
-## Локальный запуск
+## 🚀 Local Run
 ```bash
-make run            # Windows/macOS/WSL2/Любая ОС
-# Linux с node-exporter:
+make run            # Windows/macOS/WSL2/Any OS
+# Linux with node-exporter:
 make run-linux
 ```
-- http://localhost:8000  — API
-- http://localhost:8000/metrics — метрики
-- http://localhost:9090  — Prometheus
-- http://localhost:3000  — Grafana (admin/admin)
-- http://localhost:8080  — cAdvisor
 
-## Деплой в AWS через Terraform
+Available services:
+- http://localhost:8000 — API  
+- http://localhost:8000/metrics — Metrics endpoint  
+- http://localhost:9090 — Prometheus  
+- http://localhost:3000 — Grafana (admin/admin)  
+- http://localhost:8080 — cAdvisor  
+
+## ☁️ Deploy to AWS Using Terraform
 ```bash
 cd terraform
 terraform init
 terraform apply -auto-approve -var key_name=YOUR_KEYNAME
 ```
-Запомни `public_ip` → добавь в GitHub Secrets `SERVER_IP`. Добавь также `SSH_PRIVATE_KEY` для пользователя `ubuntu`.
 
-## CI/CD
-- Build & Push: `ghcr.io/arszh/devops-portfolio-app:latest`
-- Deploy: Ansible по SSH на EC2 → `docker compose up -d`
+After apply, copy the `public_ip` → save it in GitHub Secrets as `SERVER_IP`.  
+Also add `SSH_PRIVATE_KEY` for the `ubuntu` user.
 
-## Что демонстрирует
-- IaC (Terraform)
-- Provisioning/Deploy (Ansible)
-- CI/CD (GitHub Actions → GHCR → сервер)
-- Контейнеризация (Docker)
-- Наблюдаемость (Prometheus/Grafana/cAdvisor)
-- Документация и читабельная структура
+## 🔁 CI/CD Pipeline
+- Build & Push image → `ghcr.io/arszh/devops-production-demo-app:latest`
+- Deploy to EC2 via Ansible over SSH
+- On the server: `docker compose up -d`
 
-## Структура
+## 🧰 What This Project Demonstrates
+- Infrastructure as Code (Terraform → AWS EC2)
+- Provisioning & deployment using Ansible
+- CI/CD using GitHub Actions + GHCR
+- Docker containerization
+- Observability: Prometheus, Grafana, cAdvisor
+- Clean and readable project layout
+
+## 📁 Project Structure
 ```
 app/                 # FastAPI demo app
-ansible/             # provisioning & deploy
-terraform/           # IaC AWS EC2
+ansible/             # provisioning & deployment
+terraform/           # IaC AWS EC2 resources
 monitoring/          # Prometheus config
 docker/              # Prometheus image (baked config)
 .github/workflows/   # CI/CD pipeline
-docker-compose.yml   # Desktop-friendly compose (no 'version')
+docker-compose.yml   # Desktop-friendly compose
 Dockerfile
 Makefile
 README.md
