@@ -1,5 +1,5 @@
 # DevOps-CICD-Infrastructure — Production-Style DevOps (CI/CD, IaC, Observability)
-[![CI/CD](https://github.com/arszh/devops-production-demo/actions/workflows/cicd.yml/badge.svg)](https://github.com/arszh/devops-production-demo/actions)
+[![CI/CD](https://github.com/arszh/devops-cicd-infrastructure/actions/workflows/cicd.yml/badge.svg)](https://github.com/arszh/devops-cicd-infrastructure/actions)
 
 A demonstration but production-like DevOps project. It includes Docker-based services, CI/CD with GitHub Actions, AWS infrastructure provisioning with Terraform, automated deployment via Ansible, and observability with Prometheus/Grafana/cAdvisor. The stack is minimal yet reflects real production workflows.
 
